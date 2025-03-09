@@ -116,7 +116,7 @@ impl Client {
             match self.compression {
                 Compression::Gzip => {
                     let encoder = GzipEncoder::with_quality(StreamReader::new(body), Level::Best);
-                    let body: Body = Body::wrap_stream(ReaderStream::new(encoder));
+                    let body: Body = Body::from(ReaderStream::new(encoder));
 
                     let mut headers = HeaderMap::new();
                     headers.insert("Content-Encoding", HeaderValue::from_static("gzip"));
@@ -136,7 +136,7 @@ impl Client {
                 }
             }
         }
-        let body: Body = Body::wrap_stream(body);
+        let body: Body = Body::from(body);
 
         self.write_line_protocol_with_precision(&self.org, bucket, body, timestamp_precision)
             .await
